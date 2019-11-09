@@ -30,12 +30,13 @@ export class DfuseService {
 
   memoryPool() {
     return new Observable<Transaction>(subscriber => {
-      const stream = this.client.graphql(this.memoryPoolOperation, (message) => {
+      const stream = this.client.graphql(this.memoryPoolOperation, async (message) => {
         if (message.type === 'data') {
-          subscriber.next(message.data._alphaPendingTransactions)
+          console.log(message)
+          subscriber.next(message.data._alphaPendingTransactions);
 
           // Mark stream at cursor location, on re-connect, we will start back at cursor
-          // stream.mark({ cursor });
+          (await stream).mark({ cursor });
         }
 
         if (message.type === 'error') {
@@ -55,16 +56,15 @@ export class DfuseService {
 
   confirmations() {
     return new Observable<Transaction>(subscriber => {
-      const stream = this.client.graphql(this.confirmOperation, (message) => {
+      const stream = this.client.graphql(this.confirmOperation, async (message) => {
         if (message.type === 'data') {
           const { undo, cursor, node: { hash, value, matchingCalls } } = message.data.searchTransactions;
           matchingCalls.forEach((tx) => {
-            // console.log(from, to, value)
             subscriber.next({hash, ...tx});
           });
 
           // Mark stream at cursor location, on re-connect, we will start back at cursor
-          // stream.mark({ cursor });
+          (await stream).mark({ cursor });
         }
 
         if (message.type === 'error') {
