@@ -60,6 +60,9 @@ import './zone-flags.ts';
 
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
+// global.fetch = require('node-fetch')
+// global.WebSocket = require('ws')
+
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
