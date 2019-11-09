@@ -10,6 +10,8 @@ import { SoundService } from '../services/sound.service';
 })
 export class HomePage {
 
+  muteSwitch = 'Mute';
+
   transactions: Map<string, Transaction> = new Map();
   maxValue = 1;
   constructor(
@@ -21,11 +23,18 @@ export class HomePage {
       if (tx.value > 0) {
         this.transactions.set(tx.hash, tx);
         console.log(tx)
-        sound.sing(tx.value)
+        if (this.muteSwitch === 'Mute') {
+          sound.sing(tx.value)
+        }
         if (tx.value > this.maxValue) {
           this.maxValue = tx.value;
         }
       }
     });
   }
+
+  toggleMute() {
+    this.muteSwitch = (this.muteSwitch === 'Mute') ? 'Unmute' : 'Mute';
+  }
+
 }
