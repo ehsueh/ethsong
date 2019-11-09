@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-    <div fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="5px" *ngIf="transactions">
-    <app-transaction *ngFor="let tx of transactions | keyvalue" [ethValue]="tx.value.value" [maxValue]="maxValue"></app-transaction>
+    <div fxLayout="row wrap" fxLayoutAlign="start" *ngIf="transactions">
+    <app-transaction style="padding-right: 2px; padding-left: 2px;" fxFlex.xs="50" fxFlex.lt-md="33" fxFlex.md="20" fxFlex.lg="10" fxFlex.xl="5" *ngFor="let tx of transactions | keyvalue" [ethValue]="tx.value.value" [maxValue]="maxValue"></app-transaction>
     </div>
 </ion-content>
