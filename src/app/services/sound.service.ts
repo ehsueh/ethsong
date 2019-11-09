@@ -37,20 +37,11 @@ export class SoundService {
     value.exponentialRampToValueAtTime(0.01, audio.currentTime + duration);
   };
 
-  async sing(value, instrument = 1, duration = 1) {
+  async sing(value, instrument = 0) {
     const audioCtx = new AudioContext()
     const sine = audioCtx.createOscillator()
     const square = audioCtx.createOscillator()
     square.type = "square"
-
-    let sineVol, squareVol
-    if (instrument == 0){
-      sineVol = 0.6
-      squareVol = 0
-    } else if (instrument == 1) {
-      sineVol = 0.5
-      squareVol = 0.01
-    }
 
     let note
     if (value < 0.1) {
@@ -65,12 +56,18 @@ export class SoundService {
     else {
       note = 3
     }
-    
+
     note = note * 2 + this.progression[this.chord]
     if (note > 7) {
       note -= 8
     }
 
+    let duration = 1
+    if (this.counter == 0){
+      duration = 3
+    }
+
+    console.log(this.progression[this.chord])
     sine.frequency.value = this.notes[note]
     sine.start()
     sine.stop(audioCtx.currentTime + duration);
@@ -80,19 +77,22 @@ export class SoundService {
 
     this.chain([
       sine,
-      this.createAmplifier(audioCtx, sineVol, duration),
+      this.createAmplifier(audioCtx, 0.4, duration),
       audioCtx.destination
     ])
 
-    this.chain([
-      square,
-      this.createAmplifier(audioCtx, squareVol, duration),
-      audioCtx.destination
-    ])
+    if (instrument == 1) {
+      this.chain([
+        square,
+        this.createAmplifier(audioCtx, 0.01, duration),
+        audioCtx.destination
+      ])
+    }
 
     this.counter++;
-    if (this.counter % 4 == 0){
+    if (this.counter == 4) {
       this.chord++;
+      this.counter = 0
     }
     if (this.chord > 3) this.chord = 0;
   }
