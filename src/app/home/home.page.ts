@@ -15,19 +15,17 @@ export class HomePage {
     dfuse: DfuseService,
     
   ) {
-    dfuse.start().subscribe(tx => {
+    dfuse.confirmations().subscribe(tx => this.transactions.delete(tx.hash));
+    dfuse.memoryPool().subscribe(tx => {
       if (tx.value > 0) {
-        this.transactions.set(tx.hash, tx)
+        this.transactions.set(tx.hash, tx);
         console.log(tx)
         sing(Math.round(tx.value))
         if (tx.value > this.maxValue) {
           this.maxValue = tx.value;
         }
-        setTimeout(() => this.transactions.delete(tx.hash), 10000 + Math.random() * 10000)
-        // console.log(this.transactions.values())
       }
     });
-    // this.transactions.subscribe(console.log)
   }
 }
 
