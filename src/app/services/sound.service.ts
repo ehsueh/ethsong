@@ -37,7 +37,72 @@ export class SoundService {
     value.exponentialRampToValueAtTime(0.01, audio.currentTime + duration);
   };
 
-  async sing(value, instrument = 0) {
+  async special() {
+    const audioCtx = new AudioContext()
+    const root = audioCtx.createOscillator()
+    const third = audioCtx.createOscillator()
+    const fifth = audioCtx.createOscillator()
+    root.type = "triangle"
+    third.type = "triangle"
+    fifth.type = "triangle"
+
+    root.frequency.value = this.notes[0]
+    root.start()
+    root.stop(audioCtx.currentTime + 0.5);
+
+    third.frequency.value = this.notes[2]
+    third.start(0.4)
+    third.stop(audioCtx.currentTime + 0.9);
+
+    fifth.frequency.value = this.notes[4]
+    fifth.start(0.2)
+    fifth.stop(audioCtx.currentTime + 0.7);
+
+    this.chain([
+      root,
+      this.createAmplifier(audioCtx, 0.3, 0.5),
+      audioCtx.destination
+    ])
+    this.chain([
+      third,
+      this.createAmplifier(audioCtx, 0.3, 0.5),
+      audioCtx.destination
+    ])
+    this.chain([
+      fifth,
+      this.createAmplifier(audioCtx, 0.3, 0.5),
+      audioCtx.destination
+    ])
+  }
+
+  async bad() {
+    const audioCtx = new AudioContext()
+    const root = audioCtx.createOscillator()
+    const fifth = audioCtx.createOscillator()
+    root.type = "square"
+    fifth.type = "square"
+
+    root.frequency.value = this.notes[0]
+    root.start()
+    root.stop(audioCtx.currentTime + 0.5);
+
+    fifth.frequency.value = 369.99
+    fifth.start()
+    fifth.stop(audioCtx.currentTime + 0.5);
+
+    this.chain([
+      root,
+      this.createAmplifier(audioCtx, 0.3, 0.5),
+      audioCtx.destination
+    ])
+    this.chain([
+      fifth,
+      this.createAmplifier(audioCtx, 0.3, 0.5),
+      audioCtx.destination
+    ])
+  }
+
+  async sing(value, instrument = 1) {
     const audioCtx = new AudioContext()
     const sine = audioCtx.createOscillator()
     const square = audioCtx.createOscillator()
@@ -67,7 +132,6 @@ export class SoundService {
       duration = 3
     }
 
-    console.log(this.progression[this.chord])
     sine.frequency.value = this.notes[note]
     sine.start()
     sine.stop(audioCtx.currentTime + duration);
@@ -77,7 +141,7 @@ export class SoundService {
 
     this.chain([
       sine,
-      this.createAmplifier(audioCtx, 0.4, duration),
+      this.createAmplifier(audioCtx, 0.5, duration),
       audioCtx.destination
     ])
 
