@@ -37,12 +37,22 @@ export class SoundService {
     value.exponentialRampToValueAtTime(0.01, audio.currentTime + duration);
   };
 
-  async sing(value, duration = 1) {
-    const audioCtx = new AudioContext();
-    const sine = audioCtx.createOscillator();
+  async sing(value, instrument = 1, duration = 1) {
+    const audioCtx = new AudioContext()
+    const sine = audioCtx.createOscillator()
+    const square = audioCtx.createOscillator()
+    square.type = "square"
+
+    let sineVol, squareVol
+    if (instrument == 0){
+      sineVol = 0.6
+      squareVol = 0
+    } else if (instrument == 1) {
+      sineVol = 0.5
+      squareVol = 0.01
+    }
 
     let note
-
     if (value < 0.1) {
       note = 0
     }
@@ -64,20 +74,22 @@ export class SoundService {
     sine.frequency.value = this.notes[note]
     sine.start()
     sine.stop(audioCtx.currentTime + duration);
+    square.frequency.value = this.notes[note]
+    square.start()
+    square.stop(audioCtx.currentTime + duration);
 
     this.chain([
-
-      // `sineWave` outputs a pure tone.
       sine,
+      this.createAmplifier(audioCtx, sineVol, duration),
+      audioCtx.destination
+    ])
 
-      // An amplifier reduces the volume of the tone from 60% to 0
-      // over the duration of the tone.  This produces an echoey
-      // effect.
-      this.createAmplifier(audioCtx, 0.6, duration),
+    this.chain([
+      square,
+      this.createAmplifier(audioCtx, squareVol, duration),
+      audioCtx.destination
+    ])
 
-      // The amplified output is sent to the browser to be played
-      // aloud.
-      audioCtx.destination]);
     this.counter++;
     if (this.counter % 4 == 0){
       this.chord++;
@@ -89,6 +101,4 @@ export class SoundService {
       soundNodes[i].connect(soundNodes[i + 1]);
     }
   };
-
-
 }
