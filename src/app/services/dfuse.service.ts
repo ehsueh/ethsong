@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Transaction } from '../transaction/transaction';
-const { createDfuseClient } = require("@dfuse/client")
+import { createDfuseClient } from '@dfuse/client';
 
 @Injectable({
   providedIn: 'root'
