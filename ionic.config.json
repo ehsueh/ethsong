@@ -1,5 +1,7 @@
 {
   "name": "RhythmOfEthereum",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
