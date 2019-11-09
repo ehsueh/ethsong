@@ -14,8 +14,17 @@ export class SoundService {
     349.23,
     392.00,
     440.00,
-    493.88
+    493.88,
+    523.25
   ]
+  progression = [
+    0,
+    5,
+    3,
+    4
+  ]
+  counter = 0
+  chord = 0
 
   createAmplifier(audio, startValue, duration) {
     const amplifier = audio.createGain();
@@ -28,32 +37,31 @@ export class SoundService {
     value.exponentialRampToValueAtTime(0.01, audio.currentTime + duration);
   };
 
-  async sing(note, duration = 1) {
+  async sing(value, duration = 1) {
     const audioCtx = new AudioContext();
     const sine = audioCtx.createOscillator();
 
-    if (note < 1) {
-      sine.frequency.value = this.notes[0];
+    let note
+
+    if (value < 0.1) {
+      note = 0
     }
-    else if (note < 2) {
-      sine.frequency.value = this.notes[1];
+    else if (value < 0.5) {
+      note = 1
     }
-    else if (note < 5) {
-      sine.frequency.value = this.notes[2];
-    }
-    else if (note < 10) {
-      sine.frequency.value = this.notes[3];
-    }
-    else if (note < 25) {
-      sine.frequency.value = this.notes[4];
-    }
-    else if (note < 50) {
-      sine.frequency.value = this.notes[5];
+    else if (value < 1) {
+      note = 2
     }
     else {
-      sine.frequency.value = this.notes[6];
+      note = 3
+    }
+    
+    note = note * 2 + this.progression[this.chord]
+    if (note > 7) {
+      note -= 8
     }
 
+    sine.frequency.value = this.notes[note]
     sine.start()
     sine.stop(audioCtx.currentTime + duration);
 
@@ -70,6 +78,11 @@ export class SoundService {
       // The amplified output is sent to the browser to be played
       // aloud.
       audioCtx.destination]);
+    this.counter++;
+    if (this.counter % 4 == 0){
+      this.chord++;
+    }
+    if (this.chord > 3) this.chord = 0;
   }
   chain(soundNodes) {
     for (let i = 0; i < soundNodes.length - 1; i++) {
