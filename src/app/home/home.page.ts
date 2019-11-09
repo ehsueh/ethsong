@@ -3,6 +3,7 @@ import { DfuseService } from '../services/dfuse.service';
 import { Transaction } from '../transaction/transaction';
 import { map, filter } from 'rxjs/operators';
 import { Filter } from '../filter/filter';
+import { SoundService } from '../services/sound.service';
 
 @Component({
   selector: 'app-home',
@@ -11,11 +12,13 @@ import { Filter } from '../filter/filter';
 })
 export class HomePage {
 
+  muteSwitch = 'Mute';
+
   transactions: Map<string, Transaction> = new Map();
   maxValue = 1;
-
   constructor(
     dfuse: DfuseService,
+    sound: SoundService,
   ) {
     dfuse.confirmations().subscribe(tx => this.transactions.delete(tx.hash));
     dfuse.memoryPool()
@@ -23,6 +26,9 @@ export class HomePage {
       .subscribe(tx => {
         this.transactions.set(tx.hash, tx);
         console.log(tx)
+        if (this.muteSwitch === 'Mute') {
+          sound.sing(tx.value)
+        }
         if (tx.value > this.maxValue) {
           this.maxValue = tx.value;
         }
@@ -39,4 +45,9 @@ export class HomePage {
     }
     return flag
   }
+  
+  toggleMute() {
+    this.muteSwitch = (this.muteSwitch === 'Mute') ? 'Unmute' : 'Mute';
+  }
+
 }
