@@ -17,16 +17,45 @@ export class DfuseService {
     });
   }
 
-  operation = `subscription($cursor: String!) {
+  memoryPoolOperation = `subscription { 
+    _alphaPendingTransactions { hash to from value(encoding: ETHER) nonce gasPrice(encoding: ETHER) gasLimit hash inputData nonce signature { v r s } } 
+  }`;
+
+  confirmOperation = `subscription($cursor: String!) {
     searchTransactions(indexName:CALLS, query:"", lowBlockNum: -1, cursor: $cursor) {
       undo cursor
       node { hash matchingCalls { from to value(encoding:ETHER) } }
     }
   }`;
 
-  start() {
+  memoryPool() {
     return new Observable<Transaction>(subscriber => {
-      const stream = this.client.graphql(this.operation, (message) => {
+      const stream = this.client.graphql(this.memoryPoolOperation, (message) => {
+        if (message.type === 'data') {
+          subscriber.next(message.data._alphaPendingTransactions)
+
+          // Mark stream at cursor location, on re-connect, we will start back at cursor
+          // stream.mark({ cursor });
+        }
+
+        if (message.type === 'error') {
+          console.log('An error occurred', message.errors, message.terminal);
+        }
+
+        if (message.type === 'complete') {
+          console.log('Completed');
+        }
+      });
+    });
+
+    // Waits until the stream completes, or forever
+    // await stream.join()
+    // await client.release()
+  }
+
+  confirmations() {
+    return new Observable<Transaction>(subscriber => {
+      const stream = this.client.graphql(this.confirmOperation, (message) => {
         if (message.type === 'data') {
           const { undo, cursor, node: { hash, value, matchingCalls } } = message.data.searchTransactions;
           matchingCalls.forEach((tx) => {
