@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Filter
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="filterForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">To</ion-label>
+        <ion-input type="text" formControlName="to"></ion-input> 
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">From</ion-label>
+        <ion-input type="text" formControlName="from"></ion-input> 
+      </ion-item>
+    </ion-list>
+    <button (click)="filter()">Add Filter</button>
+  </form>
+  <ion-list>
+    <ion-item *ngFor="let filter of dfuse.filters">
+      {{filter|json}}
+    </ion-item>
+  </ion-list>
+</ion-content>

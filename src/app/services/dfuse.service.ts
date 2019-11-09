@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Transaction } from '../transaction/transaction';
 import { createDfuseClient } from '@dfuse/client';
+import { Filter } from '../filter/filter';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +10,18 @@ import { createDfuseClient } from '@dfuse/client';
 export class DfuseService {
 
   client: any;
+  filters: Filter[]
 
   constructor() {
     this.client = createDfuseClient({
       apiKey: 'web_4a7da19d57288bf91f508f108e25f5f9',
       network: 'mainnet.eth.dfuse.io',
     });
+    this.filters = []
+  }
+
+  addFilter(filter: Filter){
+    this.filters.push(filter)
   }
 
   memoryPoolOperation = `subscription { 
