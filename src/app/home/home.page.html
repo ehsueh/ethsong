@@ -7,6 +7,7 @@
       {{(transactions|keyvalue).length}} transactions
     </ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="toggleZero()">{{zeroEth}}</ion-button>
       <ion-button (click)="toggleMute()">{{muteSwitch}}</ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -18,7 +19,7 @@
   </div>
   <div fxLayout="row wrap" fxLayoutAlign="start" *ngIf="transactions">
     <app-transaction style="padding-right: 2px; padding-left: 2px;" fxFlex.xs="50" fxFlex.lt-md="33" fxFlex.md="20"
-      fxFlex.lg="16.6" fxFlex.xl="10" *ngFor="let tx of transactions | keyvalue" [ethValue]="tx.value.value"
+      fxFlex.lg="16.6" fxFlex.xl="10" *ngFor="let tx of transactions | keyvalue | transactionFilter : zeroEth==='Hide zero'" [ethValue]="tx.value.value"
       [maxValue]="maxValue" [hash]="tx.value.hash"></app-transaction>
   </div>
 </ion-content>

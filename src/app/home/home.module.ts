@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomePage } from './home.page';
 import { TransactionComponent } from '../transaction/transaction.component';
+import { TransactionFilterPipe } from './transaction-filter.pipe';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { TransactionComponent } from '../transaction/transaction.component';
   ],
   declarations: [
     TransactionComponent,
+    TransactionFilterPipe,
     HomePage,
   ]
 })

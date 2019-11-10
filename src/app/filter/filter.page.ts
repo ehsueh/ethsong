@@ -5,8 +5,8 @@ import { Filter } from './filter';
 
 export const ethereumAddressValidator: ValidatorFn = (control: AbstractControl): { [key: string]: any } | null => {
   const forbidden = !/^[A-Za-z0-9]{42}$|^$/.test(control.value);
-  return forbidden ? { 'invalidEthereumAddress': { value: control.value } } : null;
-};
+  return forbidden ? { invalidEthereumAddress: { value: control.value } } : null;
+}
 
 export function filterDuplicateValidator(filters: Filter[]): ValidatorFn {
   return (control: FormGroup): ValidationErrors | null => {
@@ -18,8 +18,8 @@ export function filterDuplicateValidator(filters: Filter[]): ValidatorFn {
       }
     }
     return null;
-  }
-};
+  };
+}
 
 
 export const filterFormValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {

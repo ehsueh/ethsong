@@ -19,6 +19,7 @@ export function filterMatch(targetFilter: Filter, tx: Transaction) {
 export class HomePage implements OnDestroy {
 
   muteSwitch = 'Mute';
+  zeroEth = 'Hide zero';
 
   transactions: Map<string, Transaction> = new Map();
   maxValue = 1;
@@ -33,7 +34,7 @@ export class HomePage implements OnDestroy {
     this.cormirmedTransactionsSubscription = this.dfuse.confirmations().subscribe(tx => this.transactions.delete(tx.hash));
     this.pendingTransactionsSubscription = this.dfuse.memoryPool()
       .pipe(
-        filter(tx => tx.value > 0),
+        filter(tx => tx.value >= 0),
         filter(tx => this.qualify(tx, dfuse.filters))
       )
       .subscribe(tx => {
@@ -62,6 +63,9 @@ export class HomePage implements OnDestroy {
     return false;
   }
 
+  toggleZero() {
+    this.zeroEth = (this.zeroEth === 'Hide zero') ? 'Show zero' : 'Hide zero';
+  }
 
   toggleMute() {
     this.muteSwitch = (this.muteSwitch === 'Mute') ? 'Unmute' : 'Mute';
