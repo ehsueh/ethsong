@@ -1,6 +1,3 @@
-<div class="transaction" [style.background-color]="color()">
-  <a [href]="link()">
+<div (click)="open()" class="transaction" [style.background-color]="color()">
   {{ethValue}}
-  </a>
 </div>
-
