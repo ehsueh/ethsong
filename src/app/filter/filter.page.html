@@ -9,24 +9,40 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <form [formGroup]="filterForm">
-    <ion-list>
-      <ion-item>
-        <ion-label position="stacked">To</ion-label>
-        <ion-input type="text" formControlName="to"></ion-input> 
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item>
-        <ion-label position="stacked">From</ion-label>
-        <ion-input type="text" formControlName="from"></ion-input> 
-      </ion-item>
-    </ion-list>
-    <button (click)="filter()">Add Filter</button>
-  </form>
-  <ion-list>
-    <ion-item *ngFor="let filter of dfuse.filters">
-      {{filter|json}}
+  <div class="add-filter">
+    <form [formGroup]="filterForm">
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked">From</ion-label>
+          <ion-input id="from" type="text" formControlName="from"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">To</ion-label>
+          <ion-input type="text" formControlName="to"></ion-input>
+        </ion-item>
+      </ion-list>
+          <div>
+            <ion-button [disabled]="!filterForm.valid" (click)="filter()">Add Filter</ion-button>
+          </div>
+          <div color="danger" *ngIf="filterForm.errors && filterForm.errors.duplicateFilter"
+            class="cross-validation-error-message alert alert-danger">
+            Filter already exists.
+          </div>
+          <div color="danger" *ngIf="filterForm.errors && filterForm.errors.filterForm"
+            class="cross-validation-error-message alert alert-danger">
+            At least one address must be defined.
+          </div>
+    </form>
+  </div>
+  <ion-list *ngIf="filters.length">
+    <ion-item fxLayout="row" fxLayoutAlign="space-between" *ngFor="let filter of filters; let i = index">
+      <div fxFlex>
+        <strong>From: </strong>{{filter.from}}<br>
+        <strong>To: </strong>{{filter.to}}
+      </div>
+      <div fxFlex="20" fxLayout="row" fxLayoutAlign="end">
+        <ion-button color="danger" fxFlex (click)="removeFilter(i)">remove</ion-button>
+      </div>
     </ion-item>
   </ion-list>
 </ion-content>
