@@ -43,7 +43,7 @@ export class DfuseService {
           subscriber.next(message.data._alphaPendingTransactions);
 
           // Mark stream at cursor location, on re-connect, we will start back at cursor
-          (await stream).mark({ cursor });
+          //(await stream).mark({ cursor });
         }
 
         if (message.type === 'error') {

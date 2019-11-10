@@ -22,7 +22,7 @@
         <ion-input type="text" formControlName="from"></ion-input> 
       </ion-item>
     </ion-list>
-    <button (click)="filter()">Add Filter</button>
+    <ion-button (click)="filter()">Add Filter</ion-button>
   </form>
   <ion-list>
     <ion-item *ngFor="let filter of dfuse.filters">
