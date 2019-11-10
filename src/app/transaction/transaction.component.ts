@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 function heatMapColorforValue(value) {
-  var h = (1.0 - value) * 230
-  return "hsl(" + h + ", 80%, 30%)";
+  const h = (1.0 - value) * 230;
+  return `hsl(${h}, 80%, 30%)`;
 }
 
 @Component({
@@ -10,20 +10,21 @@ function heatMapColorforValue(value) {
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss'],
 })
-export class TransactionComponent implements OnInit {
+export class TransactionComponent {
 
   @Input() ethValue: number;
   @Input() maxValue: number;
-  color() {
-    return heatMapColorforValue(this.ethValue / this.maxValue);
-  }
+  @Input() hash: string;
 
   constructor() {
   }
 
-  ngOnInit() {
+  color() {
+    return heatMapColorforValue(this.ethValue / this.maxValue);
   }
 
-
+  open() {
+    window.open(`https://etherscan.io/tx/${this.hash}`, '_blank');
+  }
 
 }

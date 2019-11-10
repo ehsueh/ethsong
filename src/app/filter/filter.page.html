@@ -1,13 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref=""></ion-back-button>
     </ion-buttons>
     <ion-title>
       Filter
     </ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <div class="add-filter">
     <form [formGroup]="filterForm">
@@ -21,17 +22,17 @@
           <ion-input type="text" formControlName="to"></ion-input>
         </ion-item>
       </ion-list>
-          <div>
-            <ion-button [disabled]="!filterForm.valid" (click)="filter()">Add Filter</ion-button>
-          </div>
-          <div color="danger" *ngIf="filterForm.errors && filterForm.errors.duplicateFilter"
-            class="cross-validation-error-message alert alert-danger">
-            Filter already exists.
-          </div>
-          <div color="danger" *ngIf="filterForm.errors && filterForm.errors.filterForm"
-            class="cross-validation-error-message alert alert-danger">
-            At least one address must be defined.
-          </div>
+      <div>
+        <ion-button [disabled]="!filterForm.valid" (click)="filter()">Add Filter</ion-button>
+      </div>
+      <div color="danger" *ngIf="filterForm.errors && filterForm.errors.duplicateFilter"
+        class="cross-validation-error-message alert alert-danger">
+        Filter already exists.
+      </div>
+      <div color="danger" *ngIf="filterForm.errors && filterForm.errors.filterForm"
+        class="cross-validation-error-message alert alert-danger">
+        At least one address must be defined.
+      </div>
     </form>
   </div>
   <ion-list *ngIf="filters.length">
