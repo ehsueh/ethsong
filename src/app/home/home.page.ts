@@ -6,6 +6,8 @@ import { Filter } from '../filter/filter';
 import { SoundService } from '../services/sound.service';
 import { Subscription } from 'rxjs';
 
+// TODO Can use GraphQL in dfuse to efficiently query instead of post-filtering here
+// We're only doing this here now as PendingTransactions is in alpha mode and doesn't supoort some features yet
 export function filterMatch(targetFilter: Filter, tx: Transaction) {
   return (targetFilter.from === '' || targetFilter.from.toLowerCase() === tx.from.toLowerCase())
     && (targetFilter.to === '' || targetFilter.to.toLowerCase() === tx.to.toLowerCase());
