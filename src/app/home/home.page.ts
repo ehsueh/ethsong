@@ -27,7 +27,7 @@ export class HomePage implements OnDestroy {
   pendingTransactionsSubscription: Subscription;
 
   constructor(
-    private dfuse: DfuseService,
+    public dfuse: DfuseService,
     sound: SoundService,
   ) {
     this.cormirmedTransactionsSubscription = this.dfuse.confirmations().subscribe(tx => this.transactions.delete(tx.hash));

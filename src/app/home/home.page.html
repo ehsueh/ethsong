@@ -13,7 +13,12 @@
 </ion-header>
 
 <ion-content>
-    <div fxLayout="row wrap" fxLayoutAlign="start" *ngIf="transactions">
-    <app-transaction style="padding-right: 2px; padding-left: 2px;" fxFlex.xs="50" fxFlex.lt-md="33" fxFlex.md="20" fxFlex.lg="16.6" fxFlex.xl="10" *ngFor="let tx of transactions | keyvalue" [ethValue]="tx.value.value" [maxValue]="maxValue" [hash]="tx.value.hash"></app-transaction>
-    </div>
+  <div *ngIf="dfuse.filters.length" style="text-align: center; margin: 10px;">
+    {{dfuse.filters.length}} active <a routerLink="filter">{{dfuse.filters.length===1?'filter': 'filters'}}</a>
+  </div>
+  <div fxLayout="row wrap" fxLayoutAlign="start" *ngIf="transactions">
+    <app-transaction style="padding-right: 2px; padding-left: 2px;" fxFlex.xs="50" fxFlex.lt-md="33" fxFlex.md="20"
+      fxFlex.lg="16.6" fxFlex.xl="10" *ngFor="let tx of transactions | keyvalue" [ethValue]="tx.value.value"
+      [maxValue]="maxValue" [hash]="tx.value.hash"></app-transaction>
+  </div>
 </ion-content>
