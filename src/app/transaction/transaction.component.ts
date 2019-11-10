@@ -14,10 +14,15 @@ export class TransactionComponent implements OnInit {
 
   @Input() ethValue: number;
   @Input() maxValue: number;
+  @Input() txHash: string;
   color() {
     return heatMapColorforValue(this.ethValue / this.maxValue);
   }
 
+  link() {
+    var etherscan = "https://etherscan.io/tx/";
+    return etherscan + this.txHash;
+  }
   constructor() {
   }
 

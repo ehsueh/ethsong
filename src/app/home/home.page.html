@@ -14,6 +14,6 @@
 
 <ion-content>
     <div fxLayout="row wrap" fxLayoutAlign="start" *ngIf="transactions">
-    <app-transaction style="padding-right: 2px; padding-left: 2px;" fxFlex.xs="50" fxFlex.lt-md="33" fxFlex.md="20" fxFlex.lg="16.6" fxFlex.xl="10" *ngFor="let tx of transactions | keyvalue" [ethValue]="tx.value.value" [maxValue]="maxValue"></app-transaction>
+    <app-transaction style="padding-right: 2px; padding-left: 2px;" fxFlex.xs="50" fxFlex.lt-md="33" fxFlex.md="20" fxFlex.lg="16.6" fxFlex.xl="10" *ngFor="let tx of transactions | keyvalue" [ethValue]="tx.value.value" [maxValue]="maxValue" [txHash]="tx.value.hash"></app-transaction>
     </div>
 </ion-content>

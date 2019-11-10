@@ -35,6 +35,8 @@ export class HomePage {
     });
   }
 
+  // TODO Use GraphQL in dfuse to efficiently query instead of post-filtering here
+  // We're only doing this here now as PendingTransactions is in alpha mode and doesn't supoort some features yet
   qualify(tx:Transaction, filters: Filter[]):boolean {
     if (filters === undefined || filters.length == 0) return true
     for (let filter of filters) {

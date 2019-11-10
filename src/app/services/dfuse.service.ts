@@ -44,6 +44,7 @@ export class DfuseService {
 
           // Mark stream at cursor location, on re-connect, we will start back at cursor
           //(await stream).mark({ cursor });
+          // TODO use cursor when it's supported by PendingTransactions
         }
 
         if (message.type === 'error') {
