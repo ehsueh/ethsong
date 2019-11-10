@@ -37,13 +37,14 @@ export class HomePage {
 
   qualify(tx:Transaction, filters: Filter[]):boolean {
     if (filters === undefined || filters.length == 0) return true
-    var flag = false
     for (let filter of filters) {
-      console.log(filter.from, filter.to, tx.from)
-      if (filter.from === "" || filter.from === tx.from) //&& (filter.to === "" || filter.to.toLowerCase() === tx.to.toLowerCase()))
-      flag = true
+      console.log(filter.from)
+      if ((filter.from === "" || filter.from.toLowerCase() === tx.from.toLowerCase()) && (filter.to === "" || filter.to.toLowerCase() === tx.to.toLowerCase())){
+        console.warn(filter.from, filter.to, tx.from)
+        return true
+      }
     }
-    return flag
+    return false
   }
   
   toggleMute() {

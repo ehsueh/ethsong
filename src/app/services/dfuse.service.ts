@@ -43,11 +43,7 @@ export class DfuseService {
     return new Observable<Transaction>(subscriber => {
       const stream = this.client.graphql(this.memoryPoolOperation, async (message) => {
         if (message.type === 'data') {
-          // console.log(message)
           subscriber.next(message.data._alphaPendingTransactions);
-
-          // Mark stream at cursor location, on re-connect, we will start back at cursor
-          // (await stream).mark({ cursor });
         }
 
         if (message.type === 'error') {
