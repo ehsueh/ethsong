@@ -21,7 +21,7 @@ export function filterMatch(targetFilter: Filter, tx: Transaction) {
 export class HomePage implements OnDestroy {
 
   muteSwitch = 'Mute';
-  zeroEth = 'Hide zero';
+  zeroEth = 'Show zero';
 
   transactions: Map<string, Transaction> = new Map();
   maxValue = 1;
@@ -42,7 +42,10 @@ export class HomePage implements OnDestroy {
       .subscribe(tx => {
         this.transactions.set(tx.hash, tx);
         if (this.muteSwitch === 'Mute') {
-          sound.sing(tx.value);
+          if ((this.zeroEth === 'Show zero' && tx.value > 0) ||
+            this.zeroEth === 'Hide zero') {
+            sound.sing(tx.value);
+          }
         }
         if (tx.value > this.maxValue) {
           this.maxValue = tx.value;

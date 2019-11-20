@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class SoundService {
 
   audioCtx
+  compressor
   notes = [
     261.63,
     293.66,
@@ -16,26 +17,27 @@ export class SoundService {
     493.88,
     523.25
   ]
-  progression = [
-    0,
-    5,
-    3,
-    4
-  ]
+  progression = [0, 5, 3, 4] // I vi IV V
   counter = 0
   chord = 0
+  noteDuration = 1
 
-  constructor() { this.audioCtx = new AudioContext() }
+  constructor() {
+    this.audioCtx = new AudioContext()
+    this.compressor = this.audioCtx.createDynamicsCompressor()
+    this.compressor.threshold.setValueAtTime(-50, this.audioCtx.currentTime);
+    this.compressor.knee.setValueAtTime(40, this.audioCtx.currentTime);
+    this.compressor.ratio.setValueAtTime(12, this.audioCtx.currentTime);
+    this.compressor.attack.setValueAtTime(0, this.audioCtx.currentTime);
+    this.compressor.release.setValueAtTime(0.25, this.audioCtx.currentTime);
+  }
 
-  createAmplifier(audio, startValue, duration) {
-    const amplifier = audio.createGain();
-    this.rampDown(audio, amplifier.gain, startValue, duration);
+  createAmplifier() {
+    const amplifier = this.audioCtx.createGain()
+    amplifier.gain.setValueAtTime(0, this.audioCtx.currentTime)
+    amplifier.gain.linearRampToValueAtTime(1, this.audioCtx.currentTime + 0.1)
+    amplifier.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + this.noteDuration)
     return amplifier;
-  };
-
-  rampDown(audio, value, startValue: number, duration: number) {
-    value.setValueAtTime(startValue, audio.currentTime);
-    value.exponentialRampToValueAtTime(0.01, audio.currentTime + duration);
   };
 
   chain(soundNodes) {
@@ -44,13 +46,13 @@ export class SoundService {
     }
   };
 
-  sing(txValue, duration = 1) {
+  sing(txValue) {
     const sine = this.audioCtx.createOscillator()
     let note
-    if (txValue < 0.1) { note = 0 }
-    else if (txValue < 0.5) { note = 1 }
-    else if (txValue < 1) { note = 2 }
-    else { note = 3 }
+    if (txValue < 0.1) { note = 0 }         // root
+    else if (txValue < 0.5) { note = 1 }    // third
+    else if (txValue < 1) { note = 2 }      // fifth
+    else { note = 3 }                       // seventh
 
     note = note * 2 + this.progression[this.chord]
     if (note > 7) {
@@ -58,14 +60,16 @@ export class SoundService {
     }
 
     sine.frequency.value = this.notes[note]
-    sine.start()
-    sine.stop(this.audioCtx.currentTime + duration);
 
     this.chain([
       sine,
-      this.createAmplifier(this.audioCtx, 0.4, duration),
+      this.createAmplifier(),
+      this.compressor,
       this.audioCtx.destination
     ])
+
+    sine.start()
+    sine.stop(this.audioCtx.currentTime + this.noteDuration);
 
     this.counter++;
     if (this.counter == 4) {
@@ -75,6 +79,3 @@ export class SoundService {
     if (this.chord > 3) this.chord = 0;
   }
 }
-
-
-
